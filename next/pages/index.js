@@ -5,8 +5,6 @@ import { scaleOrdinal } from 'd3-scale'
 import { ResponsiveBar } from '@nivo/bar'
 import 'iframe-resizer'
 
-import config from '../next.config'
-
 const surveyLabels = {
     asked: {
         legend: "Au moins une prestation de la simulation a fait l'objet d'une demande réussie (c'est à dire que l'usager a été au bout de la démarche)",
@@ -102,8 +100,9 @@ const sources = {
 }
 
 const periods = {
-    year: '2019',
-    month: 'Décembre 2019'
+    day: 'Hier',
+    month: 'Mois en cours',
+    year: 'Année en cours',
 }
 
 // make sure parent container have a defined height when using
@@ -145,7 +144,7 @@ function Home() {
 
     async function fetchData(period) {
         try {
-            const res = await fetch(`https://stats.data.gouv.fr/index.php?&expanded=1&filter_limit=50&format=JSON&idSite=9&method=Events.getName&module=API&period=${period}&date=2019-12-27`)
+            const res = await fetch(`https://stats.data.gouv.fr/index.php?&expanded=1&filter_limit=50&format=JSON&idSite=102&method=Events.getName&module=API&period=${period}&date=yesterday`)
             const json = await res.json()
             setBenefits(json)
         } catch {
@@ -155,7 +154,7 @@ function Home() {
 
     async function fetchSurveyData(period) {
         try {
-            const res = await fetch(`${config.assetPrefix}/static/stats.json`)
+            const res = await fetch('https://mes-aides.org/documents/stats.json')
             const json = await res.json()
 
             const summary = surveyIds.map(id => {
